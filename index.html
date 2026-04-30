@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FRe:x Platform | 株式会社フレックスデザイン</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue:   #4361ee;
+      --cyan:   #4cc9f0;
+      --purple: #7c3aed;
+      --green:  #059669;
+      --gray-50:  #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-700: #334155;
+      --gray-900: #0f172a;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; -webkit-font-smoothing: antialiased; }
+
+    /* ===================== LOCK SCREEN ===================== */
+    #lock-screen {
+      position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: #06070f; z-index: 1000; overflow: hidden;
+    }
+    #lock-screen::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 50% at 15% 50%,  rgba(67,97,238,.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 85% 15%,  rgba(76,201,240,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 45% at 60% 85%,  rgba(124,58,237,.12) 0%, transparent 60%);
+    }
+    #lock-screen::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .orb { position: absolute; border-radius: 50%; filter: blur(1px); animation: rise linear infinite; opacity: 0; }
+    @keyframes rise {
+      0%   { transform: translateY(110vh) scale(.2); opacity: 0; }
+      10%  { opacity: .5; }
+      90%  { opacity: .5; }
+      100% { transform: translateY(-10vh)  scale(1);  opacity: 0; }
+    }
+
+    /* Glass card */
+    .lock-card {
+      position: relative; z-index: 10; width: 420px; padding: 52px 52px 40px; text-align: center;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09); border-radius: 28px;
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 0 0 1px rgba(67,97,238,.2), 0 20px 60px rgba(0,0,0,.6), 0 0 80px rgba(67,97,238,.15);
+    }
+    .lock-logo {
+      width: 72px; height: 72px; margin: 0 auto 24px; border-radius: 20px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 0 36px rgba(67,97,238,.5), 0 0 72px rgba(67,97,238,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; font-weight: 900; color: #fff; letter-spacing: -.5px;
+    }
+    .lock-brand   { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: .06em; margin-bottom: 4px; }
+    .lock-tagline { font-size: 11px; color: rgba(255,255,255,.28); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 40px; }
+
+    .input-wrap { position: relative; margin-bottom: 10px; }
+    .lock-input {
+      width: 100%; padding: 15px 48px 15px 20px; background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12); border-radius: 14px; color: #fff;
+      font-size: 15px; letter-spacing: .12em; outline: none;
+      transition: border .25s, background .25s, box-shadow .25s;
+    }
+    .lock-input::placeholder { color: rgba(255,255,255,.2); letter-spacing: .05em; }
+    .lock-input:focus {
+      border-color: var(--blue); background: rgba(67,97,238,.12);
+      box-shadow: 0 0 0 3px rgba(67,97,238,.25);
+    }
+    .eye-btn {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; padding: 4px; line-height: 1;
+      color: rgba(255,255,255,.25); transition: color .2s;
+    }
+    .eye-btn:hover { color: rgba(255,255,255,.6); }
+    .eye-btn svg { width: 18px; height: 18px; display: block; }
+
+    .lock-error { font-size: 12px; color: #f87171; min-height: 18px; margin-bottom: 14px; opacity: 0; transition: opacity .25s; }
+    .lock-error.visible { opacity: 1; }
+
+    .lock-btn {
+      width: 100%; padding: 15px; background: linear-gradient(135deg, var(--blue), var(--cyan));
+      border: none; border-radius: 14px; color: #fff; font-size: 13px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase; cursor: pointer;
+      transition: transform .25s, box-shadow .25s; margin-bottom: 28px;
+    }
+    .lock-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(67,97,238,.45); }
+    .lock-btn:active { transform: translateY(0); }
+
+    .lock-copy { font-size: 11px; color: rgba(255,255,255,.12); letter-spacing: .04em; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%,60%  { transform: translateX(-9px); }
+      40%,80%  { transform: translateX(9px); }
+    }
+    .shake { animation: shake .4s ease-in-out; }
+    @keyframes lockExit { to { opacity: 0; transform: scale(1.04); } }
+    .lock-exit { animation: lockExit .35s ease-in-out forwards; }
+
+    /* ===================== PORTAL ===================== */
+    #portal { display: none; min-height: 100vh; background: var(--gray-50); }
+
+    /* Header */
+    .p-header {
+      position: sticky; top: 0; z-index: 100;
+      background: #0f172a;
+      border-bottom: 1px solid rgba(255,255,255,.06); padding: 14px 40px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .h-brand {
+      display: flex; align-items: center; gap: 0; line-height: 1;
+    }
+    .h-logotype {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 26px; font-weight: 600; color: #fff;
+      letter-spacing: .02em; display: flex; align-items: baseline;
+    }
+    .h-logotype .cx { color: var(--cyan); }
+    .h-pipe {
+      width: 1px; height: 18px; background: rgba(255,255,255,.5);
+      margin: 0 16px; flex-shrink: 0; align-self: center;
+    }
+    .h-company {
+      font-family: 'Noto Serif JP', serif; font-size: 12px; font-weight: 300;
+      color: rgba(255,255,255,.8); letter-spacing: .1em;
+    }
+    .h-right { margin-left: auto; }
+    .btn-lock {
+      display: flex; align-items: center; gap: 6px; padding: 7px 14px;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: 8px;
+      font-size: 12px; color: rgba(255,255,255,.55); cursor: pointer; transition: all .2s;
+    }
+    .btn-lock:hover { background: rgba(255,255,255,.13); color: #fff; }
+    .btn-lock svg { width: 14px; height: 14px; }
+
+    /* Main */
+    .p-main { max-width: 1200px; margin: 0 auto; padding: 44px 40px 80px; }
+
+    /* Hero */
+    .p-hero {
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 20px; padding: 40px 48px; margin-bottom: 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      overflow: hidden; position: relative; gap: 40px;
+    }
+    /* 波紋模様（右寄り・細め） */
+    .p-hero::before {
+      content: ''; position: absolute; right: 5%; top: 50%;
+      transform: translate(0, -50%); z-index: 0;
+      width: 350px; height: 350px;
+      background:
+        radial-gradient(circle at center, transparent 30%, rgba(67,97,238,.12) 30%, rgba(67,97,238,.12) 32%, transparent 32%),
+        radial-gradient(circle at center, transparent 40%, rgba(76,201,240,.15) 40%, rgba(76,201,240,.15) 42%, transparent 42%),
+        radial-gradient(circle at center, transparent 50%, rgba(67,97,238,.10) 50%, rgba(67,97,238,.10) 52%, transparent 52%),
+        radial-gradient(circle at center, transparent 60%, rgba(76,201,240,.08) 60%, rgba(76,201,240,.08) 62%, transparent 62%),
+        radial-gradient(circle at center, transparent 70%, rgba(67,97,238,.06) 70%, rgba(67,97,238,.06) 72%, transparent 72%);
+      pointer-events: none;
+    }
+    /* 右上のグロー */
+    .p-hero::after {
+      content: ''; position: absolute; right: -60px; top: -60px;
+      width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(67,97,238,.18) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* 左：テキスト */
+    .hero-text { position: relative; z-index: 10; flex: 1; }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 18px;
+    }
+    .hero-eyebrow-brand {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 14px; font-weight: 600; color: rgba(255,255,255,.9);
+      letter-spacing: .04em;
+    }
+    .hero-eyebrow-brand .hcx { color: var(--cyan); }
+    .hero-eyebrow-line { width: 24px; height: 1px; background: rgba(255,255,255,.45); }
+    .hero-eyebrow-tag {
+      font-size: 10px; font-weight: 500; color: rgba(255,255,255,.7);
+      letter-spacing: .18em; text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+      font-size: 28px; font-weight: 400; color: #fff;
+      line-height: 1.4; letter-spacing: .04em; margin-bottom: 14px;
+    }
+    .hero-title strong { font-weight: 700; }
+
+    .hero-sub {
+      font-size: 13px; color: rgba(255,255,255,.75);
+      line-height: 1.8; letter-spacing: .03em;
+      font-family: 'Noto Serif JP', serif; font-weight: 300;
+    }
+
+    /* 右：統計 */
+    .hero-stats {
+      position: relative; z-index: 10; flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 20px;
+    }
+    .hero-counts {
+      display: flex; align-items: stretch; gap: 0;
+    }
+    .hc-item {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 12px 24px;
+    }
+    .hc-item + .hc-item {
+      border-left: 1px solid rgba(255,255,255,.18);
+    }
+    .hc-num {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 36px; font-weight: 600; color: #fff; line-height: 1;
+    }
+    .hc-lbl {
+      font-size: 11px; color: rgba(255,255,255,.75);
+      letter-spacing: .08em; margin-top: 6px;
+      font-family: 'Noto Serif JP', serif; font-weight: 300;
+    }
+    .hero-total {
+      display: flex; align-items: baseline; gap: 8px;
+      border-top: 1px solid rgba(255,255,255,.15);
+      padding-top: 16px; width: 100%; justify-content: flex-end;
+    }
+    .ht-num {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 13px; font-weight: 500; color: rgba(255,255,255,.65);
+    }
+    .ht-lbl {
+      font-size: 10px; color: rgba(255,255,255,.5);
+      letter-spacing: .14em; text-transform: uppercase;
+    }
+
+    /* Section */
+    .p-section { margin-bottom: 44px; }
+    .section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .s-badge {
+      display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px;
+      border-radius: 999px; font-size: 13px; font-weight: 600;
+    }
+    .s-badge svg { width: 14px; height: 14px; }
+    .s-badge.biz { background: #eff6ff; color: #2563eb; }
+    .s-badge.nai { background: #f5f3ff; color: #6d28d9; }
+    .s-badge.acc { background: #ecfdf5; color: #059669; }
+    .s-count { font-size: 12px; color: var(--gray-400); }
+
+    /* Grid */
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+
+    /* Card */
+    .tool-card {
+      display: block; background: #fff; border: 1px solid var(--gray-200);
+      border-radius: 16px; padding: 22px 22px 18px; text-decoration: none;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      position: relative; overflow: hidden;
+    }
+    .tool-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      opacity: 0; transition: opacity .2s;
+    }
+    .tool-card.biz::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+    .tool-card.nai::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+    .tool-card.acc::before { background: linear-gradient(90deg, #059669, #34d399); }
+    .tool-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.1); border-color: transparent; }
+    .tool-card:hover::before { opacity: 1; }
+
+    /* Card inner */
+    .c-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 12px; }
+    .c-icon {
+      width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .c-icon svg { width: 22px; height: 22px; display: block; }
+    .c-icon.biz { background: #dbeafe; }
+    .c-icon.nai { background: #ede9fe; }
+    .c-icon.acc { background: #d1fae5; }
+
+    .c-no   { font-size: 10px; font-weight: 700; color: var(--gray-400); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px; }
+    .c-name { font-size: 14px; font-weight: 700; color: var(--gray-900); line-height: 1.35; }
+    .c-desc { font-size: 12px; color: var(--gray-500); line-height: 1.75; }
+
+    .c-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--gray-100);
+    }
+    .c-url {
+      font-size: 11px; color: var(--gray-400); font-family: 'SF Mono','Fira Code',monospace;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 230px;
+    }
+    .c-arrow {
+      width: 30px; height: 30px; border-radius: 8px; background: var(--gray-100);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background .2s;
+    }
+    .c-arrow svg { width: 14px; height: 14px; display: block; transition: stroke .2s; }
+    .tool-card:hover .c-arrow { background: var(--blue); }
+    .tool-card:hover .c-arrow svg { stroke: #fff; }
+
+    /* Footer */
+    .p-footer {
+      background: #fff; border-top: 1px solid var(--gray-200); padding: 20px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; color: var(--gray-400);
+    }
+
+    /* ===================== CF MODAL ===================== */
+    .cf-backdrop {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(15, 23, 42, .45);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .cf-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .cf-modal {
+      width: 360px; background: #fff; border-radius: 20px; padding: 32px 32px 28px;
+      box-shadow: 0 24px 64px rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.06);
+      transform: translateY(12px) scale(.97);
+      transition: transform .25s, opacity .25s;
+      opacity: 0;
+    }
+    .cf-backdrop.open .cf-modal { transform: translateY(0) scale(1); opacity: 1; }
+
+    .cf-modal-head {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    }
+    .cf-modal-icon {
+      width: 44px; height: 44px; border-radius: 12px; background: #d1fae5; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cf-modal-icon svg { width: 20px; height: 20px; }
+    .cf-modal-title { font-size: 15px; font-weight: 700; color: var(--gray-900); }
+    .cf-modal-sub   { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+    .cf-divider { height: 1px; background: var(--gray-100); margin-bottom: 20px; }
+
+    .cf-label { font-size: 11px; font-weight: 600; color: var(--gray-500); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+
+    .cf-input-wrap { position: relative; margin-bottom: 8px; }
+    .cf-input {
+      width: 100%; padding: 12px 42px 12px 14px;
+      border: 1.5px solid var(--gray-200); border-radius: 10px;
+      font-size: 14px; color: var(--gray-900); outline: none;
+      transition: border .2s, box-shadow .2s; background: var(--gray-50);
+    }
+    .cf-input:focus {
+      border-color: #059669; background: #fff;
+      box-shadow: 0 0 0 3px rgba(5,150,105,.15);
+    }
+    .cf-eye {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; padding: 2px; line-height: 1;
+      color: var(--gray-400); transition: color .2s;
+    }
+    .cf-eye:hover { color: var(--gray-700); }
+    .cf-eye svg { width: 16px; height: 16px; display: block; }
+
+    .cf-error { font-size: 12px; color: #dc2626; min-height: 16px; margin-bottom: 16px; opacity: 0; transition: opacity .2s; }
+    .cf-error.visible { opacity: 1; }
+
+    .cf-btns { display: flex; gap: 8px; }
+    .cf-btn-cancel {
+      flex: 1; padding: 11px; border: 1.5px solid var(--gray-200); border-radius: 10px;
+      background: #fff; font-size: 13px; color: var(--gray-500); cursor: pointer;
+      font-weight: 500; transition: all .2s;
+    }
+    .cf-btn-cancel:hover { background: var(--gray-100); color: var(--gray-700); }
+    .cf-btn-open {
+      flex: 2; padding: 11px; border: none; border-radius: 10px;
+      background: linear-gradient(135deg, #059669, #10b981);
+      font-size: 13px; color: #fff; cursor: pointer; font-weight: 600;
+      transition: all .2s; letter-spacing: .02em;
+    }
+    .cf-btn-open:hover { box-shadow: 0 6px 20px rgba(5,150,105,.35); transform: translateY(-1px); }
+    .cf-btn-open:active { transform: translateY(0); }
+
+    @keyframes cfShake {
+      0%,100% { transform: translateX(0); }
+      20%,60%  { transform: translateX(-7px); }
+      40%,80%  { transform: translateX(7px); }
+    }
+    .cf-shake { animation: cfShake .35s ease-in-out; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .p-header { padding: 14px 20px; }
+      .p-main   { padding: 28px 20px 60px; }
+      .p-hero   { flex-direction: column; gap: 20px; padding: 28px 24px; }
+      .hero-stat { text-align: left; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .lock-card  { width: calc(100% - 32px); padding: 40px 28px 32px; }
+      .p-footer   { flex-direction: column; gap: 6px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ==================== SVG ICON DEFS (reusable) ==================== -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <defs>
+    <!-- calendar-user (スケジュール) -->
+    <symbol id="ico-calendar-user" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2.5" stroke-width="1.75"/>
+      <path d="M8 2v4M16 2v4" stroke-width="1.75"/>
+      <path d="M3 10h18" stroke-width="1.75"/>
+      <circle cx="9"  cy="15.5" r="1.75" stroke-width="1.5"/>
+      <circle cx="15" cy="15.5" r="1.75" stroke-width="1.5"/>
+      <path d="M5.5 20c0-2 1.6-3.5 3.5-3.5s3.5 1.5 3.5 3.5" stroke-width="1.5"/>
+      <path d="M12.5 20c0-2 1.1-3.5 2.5-3.5S18 18 18 20" stroke-width="1.5"/>
+    </symbol>
+
+    <!-- gantt (工程管理) -->
+    <symbol id="ico-gantt" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 3v18M3 21h18" stroke-width="1.75"/>
+      <rect x="5" y="5.5" width="8"  height="2.5" rx="1.25" stroke-width="0"/>
+      <rect x="5" y="10" width="13" height="2.5" rx="1.25" stroke-width="0"/>
+      <rect x="5" y="14.5" width="6"  height="2.5" rx="1.25" stroke-width="0"/>
+    </symbol>
+
+    <!-- calendar-check (点検工程) -->
+    <symbol id="ico-calendar-check" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2.5" stroke-width="1.75"/>
+      <path d="M8 2v4M16 2v4" stroke-width="1.75"/>
+      <path d="M3 10h18" stroke-width="1.75"/>
+      <path d="M8 16l2.5 2.5L16 13" stroke-width="1.75"/>
+    </symbol>
+
+    <!-- briefcase (業務請負) -->
+    <symbol id="ico-briefcase" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="8.5" width="20" height="12.5" rx="2" stroke-width="1.75"/>
+      <path d="M16 8.5V7a2 2 0 00-2-2h-4a2 2 0 00-2 2v1.5" stroke-width="1.75"/>
+      <path d="M2 14h20M12 14v3" stroke-width="1.5"/>
+    </symbol>
+
+    <!-- users (週次MTG) -->
+    <symbol id="ico-users" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="7.5" r="3" stroke-width="1.75"/>
+      <path d="M3 21c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke-width="1.75"/>
+      <circle cx="17" cy="7.5" r="2.25" stroke-width="1.5"/>
+      <path d="M21 21c0-2.8-1.8-5.1-4-5.7" stroke-width="1.5"/>
+    </symbol>
+
+    <!-- car (出張手当) -->
+    <symbol id="ico-car" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 17H3v-4l2.4-6H18.6L21 13v4h-2" stroke-width="1.75"/>
+      <circle cx="7.5" cy="17.5" r="2.5" stroke-width="1.75"/>
+      <circle cx="16.5" cy="17.5" r="2.5" stroke-width="1.75"/>
+      <path d="M5 13h14" stroke-width="1.5"/>
+      <path d="M9.5 7.5h5" stroke-width="1.5"/>
+    </symbol>
+
+    <!-- signpost (道路附属物) -->
+    <symbol id="ico-signpost" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="22" x2="12" y2="3" stroke-width="1.75"/>
+      <path d="M12 8.5H5L3 6 5 3.5h7" stroke-width="1.75"/>
+      <path d="M12 15.5h7l2 2.5-2 2.5h-7" stroke-width="1.75"/>
+    </symbol>
+
+    <!-- trending-up (キャッシュフロー) -->
+    <symbol id="ico-trending-up" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" stroke-width="1.75"/>
+      <polyline points="17 7 22 7 22 12" stroke-width="1.75"/>
+    </symbol>
+
+    <!-- building (出張宿泊) -->
+    <symbol id="ico-building" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 21h18M3 21V8l9-5 9 5v13" stroke-width="1.75"/>
+      <path d="M9 21v-5a2 2 0 014 0v5" stroke-width="1.75"/>
+      <rect x="7"  y="10" width="3" height="3" rx=".5" stroke-width="1.5"/>
+      <rect x="14" y="10" width="3" height="3" rx=".5" stroke-width="1.5"/>
+    </symbol>
+
+    <!-- book (帳簿) -->
+    <symbol id="ico-book" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke-width="1.75"/>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" stroke-width="1.75"/>
+      <line x1="9" y1="8"  x2="15" y2="8"  stroke-width="1.5"/>
+      <line x1="9" y1="12" x2="15" y2="12" stroke-width="1.5"/>
+    </symbol>
+
+    <!-- arrow-right (card arrow) -->
+    <symbol id="ico-arrow-right" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14M13 6l6 6-6 6" stroke-width="2" stroke="#94a3b8"/>
+    </symbol>
+
+    <!-- lock (btn) -->
+    <symbol id="ico-lock" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="5" y="11" width="14" height="10" rx="2" stroke-width="1.75"/>
+      <path d="M8 11V7a4 4 0 018 0v4" stroke-width="1.75"/>
+    </symbol>
+
+    <!-- eye -->
+    <symbol id="ico-eye" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke-width="1.75"/>
+      <circle cx="12" cy="12" r="3" stroke-width="1.75"/>
+    </symbol>
+
+    <!-- eye-off -->
+    <symbol id="ico-eye-off" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" stroke-width="1.75"/>
+      <line x1="1" y1="1" x2="23" y2="23" stroke-width="1.75"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ==================== LOCK SCREEN ==================== -->
+<div id="lock-screen">
+  <div class="orb" style="width:5px;height:5px;left:12%;background:#4361ee;animation-duration:9s;animation-delay:0s"></div>
+  <div class="orb" style="width:4px;height:4px;left:28%;background:#4cc9f0;animation-duration:12s;animation-delay:2.5s"></div>
+  <div class="orb" style="width:7px;height:7px;left:47%;background:#7c3aed;animation-duration:8s;animation-delay:1s"></div>
+  <div class="orb" style="width:5px;height:5px;left:63%;background:#4361ee;animation-duration:10s;animation-delay:4s"></div>
+  <div class="orb" style="width:3px;height:3px;left:80%;background:#4cc9f0;animation-duration:13s;animation-delay:0.5s"></div>
+  <div class="orb" style="width:6px;height:6px;left:92%;background:#7c3aed;animation-duration:9s;animation-delay:3s"></div>
+
+  <div class="lock-card" id="lock-card">
+    <div class="lock-logo">FD</div>
+    <div class="lock-brand">FD Platform</div>
+    <div class="lock-tagline">Flex Design Internal Tools</div>
+
+    <div class="input-wrap">
+      <input type="password" id="pw-input" class="lock-input" placeholder="パスワードを入力" autocomplete="off" spellcheck="false"/>
+      <button class="eye-btn" id="eye-btn" onclick="toggleEye()" tabindex="-1">
+        <svg id="eye-icon"><use href="#ico-eye" stroke="currentColor"/></svg>
+      </button>
+    </div>
+    <div class="lock-error" id="lock-error">パスワードが正しくありません</div>
+    <button class="lock-btn" onclick="unlock()">▶&ensp;UNLOCK</button>
+    <div class="lock-copy">© 2022 Flex Design Co., Ltd. — Internal Use Only</div>
+  </div>
+</div>
+
+<!-- ==================== PORTAL ==================== -->
+<div id="portal">
+
+  <!-- Header -->
+  <header class="p-header">
+    <div class="h-brand">
+      <div class="h-logotype">FR<span style="font-weight:300">e:</span><span class="cx">x</span>&thinsp;Platform</div>
+      <div class="h-pipe"></div>
+      <div class="h-company">株式会社フレックスデザイン</div>
+    </div>
+    <div class="h-right">
+      <button class="btn-lock" onclick="lockAgain()">
+        <svg><use href="#ico-lock" stroke="#64748b"/></svg>
+        ロック
+      </button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="p-main">
+
+    <!-- Hero -->
+    <div class="p-hero">
+      <div class="hero-text">
+        <div class="hero-eyebrow">
+          <span class="hero-eyebrow-brand">FRe:<span class="hcx">x</span> Design inc.</span>
+          <span class="hero-eyebrow-line"></span>
+          <span class="hero-eyebrow-tag">Internal Portal</span>
+        </div>
+        <div class="hero-title">社内システムポータル</div>
+        <div class="hero-sub">道路インフラ点検・経営管理を支える<br>フレックスデザインの統合ツール群</div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-counts">
+          <div class="hc-item">
+            <div class="hc-num">6</div>
+            <div class="hc-lbl">業務管理</div>
+          </div>
+          <div class="hc-item">
+            <div class="hc-num">1</div>
+            <div class="hc-lbl">内業</div>
+          </div>
+          <div class="hc-item">
+            <div class="hc-num">3</div>
+            <div class="hc-lbl">経理</div>
+          </div>
+        </div>
+        <div class="hero-total">
+          <span class="ht-num">10</span>
+          <span class="ht-lbl">systems total</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 業務関連 (6) ── -->
+    <section class="p-section">
+      <div class="section-head">
+        <span class="s-badge biz">
+          <svg><use href="#ico-briefcase" stroke="#2563eb"/></svg>
+          業務関連
+        </span>
+        <span class="s-count">6 systems</span>
+      </div>
+      <div class="cards-grid">
+
+        <!-- No.01 スケジュール管理 -->
+        <a href="https://frex-design.github.io/schedule-calendar/" target="_blank" class="tool-card biz">
+          <div class="c-top">
+            <div class="c-icon biz">
+              <svg><use href="#ico-calendar-user" stroke="#2563eb"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 01</div>
+              <div class="c-name">スケジュール管理ツール</div>
+            </div>
+          </div>
+          <div class="c-desc">全社員の 1 週間予定をグループ表示。予定タイプ選択（テレワーク・会議・外出・出張等）、TODO リスト（3 段階優先度）、iCal 購読 URL、.ics エクスポート</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design.github.io/schedule-calendar</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.02 工程管理表 -->
+        <a href="https://frex-design.github.io/process-chart/" target="_blank" class="tool-card biz">
+          <div class="c-top">
+            <div class="c-icon biz">
+              <svg style="overflow:visible"><use href="#ico-gantt" fill="#2563eb" stroke="none"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 02</div>
+              <div class="c-name">工程管理表</div>
+            </div>
+          </div>
+          <div class="c-desc">6 工程フロー管理（準備計画 → 現地踏査 → 調査まとめ → 定期点検 → 損傷図 → 調書）。ドラッグ操作で工程移動・延長、月間カレンダー表示、Supabase リアルタイム同期</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design.github.io/process-chart</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.03 点検実施工程表 -->
+        <a href="https://frex-design.github.io/project-schedule/" target="_blank" class="tool-card biz">
+          <div class="c-top">
+            <div class="c-icon biz">
+              <svg><use href="#ico-calendar-check" stroke="#2563eb"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 03</div>
+              <div class="c-name">点検実施工程表管理システム</div>
+            </div>
+          </div>
+          <div class="c-desc">CSV 読込自動判定（橋梁名・路線名・橋長・幅員・径間数）。バーチャート工程表、月間スケジュール印刷、Google カレンダー連携、橋梁・トンネル・シェッド対応</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design.github.io/project-schedule</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.04 業務請負管理 -->
+        <a href="https://frex-design.github.io/business-list/" target="_blank" class="tool-card biz">
+          <div class="c-top">
+            <div class="c-icon biz">
+              <svg><use href="#ico-briefcase" stroke="#2563eb"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 04</div>
+              <div class="c-name">業務請負管理システム</div>
+            </div>
+          </div>
+          <div class="c-desc">受注管理 — 業務一覧・協力会社管理・中間支払管理・業務進捗。当初契約額・増工・減額・精算額管理、売上高自動集計、目標達成率可視化、原価・粗利分析</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design.github.io/business-list</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.05 週次MTG -->
+        <a href="https://frex-design.github.io/meeting/meeting-manager.html" target="_blank" class="tool-card biz">
+          <div class="c-top">
+            <div class="c-icon biz">
+              <svg><use href="#ico-users" stroke="#2563eb"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 05</div>
+              <div class="c-name">週次ミーティング管理</div>
+            </div>
+          </div>
+          <div class="c-desc">事業所別議事録（秋田・横手対応）。全体メモ、メンバー別作業状況、お知らせセクション、既存ミーティングコピー機能、管理者認証</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design.github.io/meeting</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.06 出張宿泊（業務関連） -->
+        <a href="https://frex-design.github.io/Accommodation-management/" target="_blank" class="tool-card biz">
+          <div class="c-top">
+            <div class="c-icon biz">
+              <svg><use href="#ico-building" stroke="#2563eb"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 06</div>
+              <div class="c-name">出張宿泊管理システム</div>
+            </div>
+          </div>
+          <div class="c-desc">宿泊予算管理 — 宿泊情報登録（業務名・宿泊日・宿泊先・宿泊者・金額）、チェックイン前/宿泊済み分類、年度別月別集計、業務別合計金額・総人工計算、全社員リアルタイム共有</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design.github.io/Accommodation-management</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ── 内業関連 (1) ── -->
+    <section class="p-section">
+      <div class="section-head">
+        <span class="s-badge nai">
+          <svg><use href="#ico-signpost" stroke="#6d28d9"/></svg>
+          内業関連
+        </span>
+        <span class="s-count">1 system</span>
+      </div>
+      <div class="cards-grid">
+
+        <!-- No.07 道路附属物 -->
+        <a href="https://road-acce-mlit.vercel.app/" target="_blank" class="tool-card nai">
+          <div class="c-top">
+            <div class="c-icon nai">
+              <svg><use href="#ico-signpost" stroke="#6d28d9"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 07</div>
+              <div class="c-name">道路附属物点検管理システム</div>
+            </div>
+          </div>
+          <div class="c-desc">xROAD 準拠調書作成。国交省附属物要領準拠、過年度調書一括取込、調書編集、xROAD 登録データ一括出力。附属物要領と xROAD 登録マニュアルに完全準拠</div>
+          <div class="c-foot">
+            <div class="c-url">road-acce-mlit.vercel.app</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ── 経理関連 (3) ── -->
+    <section class="p-section">
+      <div class="section-head">
+        <span class="s-badge acc">
+          <svg><use href="#ico-trending-up" stroke="#059669"/></svg>
+          経理関連
+        </span>
+        <span class="s-count">3 systems</span>
+      </div>
+      <div class="cards-grid">
+
+        <!-- No.08 キャッシュフロー（パスワード保護） -->
+        <a href="javascript:void(0)" onclick="openCfModal()" class="tool-card acc">
+          <div class="c-top">
+            <div class="c-icon acc">
+              <svg><use href="#ico-trending-up" stroke="#059669"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 08</div>
+              <div class="c-name">日次キャッシュフロー管理システム</div>
+            </div>
+          </div>
+          <div class="c-desc">全口座統合管理 — 手元資金合計・全口座残高リアルタイム表示、振込予定（今日〜1 週間後）、当月売上高追跡、CSV 取込/出力、月次・年別集計、残高推移グラフ</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design.github.io/cashflow</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.09 出張手当（経理関連） -->
+        <a href="https://frex-design.github.io/travel-allowance/" target="_blank" class="tool-card acc">
+          <div class="c-top">
+            <div class="c-icon acc">
+              <svg><use href="#ico-car" stroke="#059669"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 09</div>
+              <div class="c-name">出張手当管理システム</div>
+            </div>
+          </div>
+          <div class="c-desc">手当自動計算 — 3 タイプ対応（日帰り・宿泊・夜勤）、¥1,500 × 日数自動計算、ステータス管理（未支給・支給済・キャンセル）、CSV 出力/取込、業務別集計</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design.github.io/travel-allowance</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.10 横手帳簿 -->
+        <a href="https://frex-design.github.io/yokote-ledger/" target="_blank" class="tool-card acc">
+          <div class="c-top">
+            <div class="c-icon acc">
+              <svg><use href="#ico-book" stroke="#059669"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 10</div>
+              <div class="c-name">横手事業所 入出金帳簿</div>
+            </div>
+          </div>
+          <div class="c-desc">2 資金源追跡 — 秋田銀行（横手）＋現金（横手）、4 トランザクションタイプ（現金支出・ATM 引出・本社資金移動・手当返金）、残高自動計算、Supabase クラウド同期</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design.github.io/yokote-ledger</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== CF PASSWORD MODAL ==================== -->
+  <div class="cf-backdrop" id="cf-backdrop" onclick="closeCfModal(event)">
+    <div class="cf-modal" id="cf-modal">
+      <div class="cf-modal-head">
+        <div class="cf-modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+            <polyline points="17 7 22 7 22 12"/>
+          </svg>
+        </div>
+        <div>
+          <div class="cf-modal-title">日次キャッシュフロー管理システム</div>
+          <div class="cf-modal-sub">アクセス認証が必要です</div>
+        </div>
+      </div>
+      <div class="cf-divider"></div>
+      <div class="cf-label">パスワード</div>
+      <div class="cf-input-wrap">
+        <input type="password" id="cf-pw" class="cf-input" placeholder="パスワードを入力" autocomplete="off" spellcheck="false"/>
+        <button class="cf-eye" id="cf-eye-btn" onclick="toggleCfEye()" tabindex="-1">
+          <svg id="cf-eye-icon"><use href="#ico-eye" stroke="currentColor"/></svg>
+        </button>
+      </div>
+      <div class="cf-error" id="cf-error">パスワードが正しくありません</div>
+      <div class="cf-btns">
+        <button class="cf-btn-cancel" onclick="closeCfModal()">キャンセル</button>
+        <button class="cf-btn-open"   onclick="submitCfPw()">認証して開く →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="p-footer">
+    <span>© 2022 株式会社フレックスデザイン — 社内専用 / Internal Use Only</span>
+    <span>10 systems · Powered by GitHub Pages &amp; Supabase</span>
+  </footer>
+
+</div>
+
+<script>
+  const PASSWORD = 'frex2022'; // ← パスワード変更はここだけ
+
+  if (sessionStorage.getItem('fd_auth') === '1') showPortal();
+
+  function unlock() {
+    const input = document.getElementById('pw-input');
+    const error = document.getElementById('lock-error');
+    const card  = document.getElementById('lock-card');
+    if (input.value === PASSWORD) {
+      sessionStorage.setItem('fd_auth', '1');
+      document.getElementById('lock-screen').classList.add('lock-exit');
+      setTimeout(showPortal, 350);
+    } else {
+      error.classList.add('visible');
+      card.classList.add('shake');
+      input.value = '';
+      setTimeout(() => { card.classList.remove('shake'); error.classList.remove('visible'); }, 1600);
+    }
+  }
+
+  function showPortal() {
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('portal').style.display = 'block';
+  }
+
+  function lockAgain() {
+    sessionStorage.removeItem('fd_auth');
+    document.getElementById('portal').style.display = 'none';
+    const ls = document.getElementById('lock-screen');
+    ls.style.display = 'flex'; ls.style.opacity = '1'; ls.style.transform = 'scale(1)';
+    ls.classList.remove('lock-exit');
+    document.getElementById('pw-input').value = '';
+  }
+
+  let eyeOpen = false;
+  function toggleEye() {
+    eyeOpen = !eyeOpen;
+    document.getElementById('pw-input').type = eyeOpen ? 'text' : 'password';
+    document.getElementById('eye-icon').innerHTML =
+      `<use href="${eyeOpen ? '#ico-eye-off' : '#ico-eye'}" stroke="currentColor"/>`;
+  }
+
+  document.getElementById('pw-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') unlock();
+  });
+
+  // ── キャッシュフロー専用パスワード ──
+  const CF_PASSWORD = 'frex@cf'; // ← 変更はここだけ
+  const CF_URL      = 'https://frex-design.github.io/cashflow/';
+
+  function openCfModal() {
+    document.getElementById('cf-pw').value = '';
+    document.getElementById('cf-error').classList.remove('visible');
+    document.getElementById('cf-backdrop').classList.add('open');
+    setTimeout(() => document.getElementById('cf-pw').focus(), 50);
+  }
+
+  function closeCfModal(e) {
+    if (e && e.target !== document.getElementById('cf-backdrop')) return;
+    document.getElementById('cf-backdrop').classList.remove('open');
+  }
+
+  function submitCfPw() {
+    const input = document.getElementById('cf-pw');
+    const error = document.getElementById('cf-error');
+    const modal = document.getElementById('cf-modal');
+    if (input.value === CF_PASSWORD) {
+      document.getElementById('cf-backdrop').classList.remove('open');
+      window.open(CF_URL, '_blank');
+      input.value = '';
+    } else {
+      error.classList.add('visible');
+      modal.classList.add('cf-shake');
+      input.value = '';
+      setTimeout(() => {
+        modal.classList.remove('cf-shake');
+        error.classList.remove('visible');
+      }, 1400);
+    }
+  }
+
+  let cfEyeOpen = false;
+  function toggleCfEye() {
+    cfEyeOpen = !cfEyeOpen;
+    document.getElementById('cf-pw').type = cfEyeOpen ? 'text' : 'password';
+    document.getElementById('cf-eye-icon').innerHTML =
+      `<use href="${cfEyeOpen ? '#ico-eye-off' : '#ico-eye'}" stroke="currentColor"/>`;
+  }
+
+  document.getElementById('cf-pw').addEventListener('keydown', e => {
+    if (e.key === 'Enter')  submitCfPw();
+    if (e.key === 'Escape') closeCfModal();
+  });
+</script>
+</body>
+</html>
