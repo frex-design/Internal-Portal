@@ -887,23 +887,42 @@
 </div>
 
 <script>
-  const PASSWORD = 'frex2022'; // ← パスワード変更はここだけ
+  // ページ読み込み時にセッション確認
+  (async () => {
+    const res = await fetch('/api/verify');
+    if (res.ok) {
+      const data = await res.json();
+      if (data.authenticated) showPortal();
+    }
+  })();
 
-  if (sessionStorage.getItem('fd_auth') === '1') showPortal();
-
-  function unlock() {
+  async function unlock() {
     const input = document.getElementById('pw-input');
     const error = document.getElementById('lock-error');
     const card  = document.getElementById('lock-card');
-    if (input.value === PASSWORD) {
-      sessionStorage.setItem('fd_auth', '1');
-      document.getElementById('lock-screen').classList.add('lock-exit');
-      setTimeout(showPortal, 350);
-    } else {
+
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: input.value })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('lock-screen').classList.add('lock-exit');
+        setTimeout(showPortal, 350);
+      } else {
+        error.classList.add('visible');
+        card.classList.add('shake');
+        input.value = '';
+        setTimeout(() => { card.classList.remove('shake'); error.classList.remove('visible'); }, 1600);
+      }
+    } catch (err) {
+      console.error('Auth error:', err);
+      error.textContent = '認証エラーが発生しました';
       error.classList.add('visible');
-      card.classList.add('shake');
-      input.value = '';
-      setTimeout(() => { card.classList.remove('shake'); error.classList.remove('visible'); }, 1600);
     }
   }
 
@@ -912,8 +931,8 @@
     document.getElementById('portal').style.display = 'block';
   }
 
-  function lockAgain() {
-    sessionStorage.removeItem('fd_auth');
+  async function lockAgain() {
+    await fetch('/api/logout', { method: 'POST' });
     document.getElementById('portal').style.display = 'none';
     const ls = document.getElementById('lock-screen');
     ls.style.display = 'flex'; ls.style.opacity = '1'; ls.style.transform = 'scale(1)';
@@ -934,9 +953,6 @@
   });
 
   // ── キャッシュフロー専用パスワード ──
-  const CF_PASSWORD = 'frex@cf'; // ← 変更はここだけ
-  const CF_URL      = 'https://frex-design.github.io/cashflow/';
-
   function openCfModal() {
     document.getElementById('cf-pw').value = '';
     document.getElementById('cf-error').classList.remove('visible');
@@ -949,22 +965,37 @@
     document.getElementById('cf-backdrop').classList.remove('open');
   }
 
-  function submitCfPw() {
+  async function submitCfPw() {
     const input = document.getElementById('cf-pw');
     const error = document.getElementById('cf-error');
     const modal = document.getElementById('cf-modal');
-    if (input.value === CF_PASSWORD) {
-      document.getElementById('cf-backdrop').classList.remove('open');
-      window.open(CF_URL, '_blank');
-      input.value = '';
-    } else {
+
+    try {
+      const res = await fetch('/api/cf-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: input.value })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('cf-backdrop').classList.remove('open');
+        window.open(data.url, '_blank');
+        input.value = '';
+      } else {
+        error.classList.add('visible');
+        modal.classList.add('cf-shake');
+        input.value = '';
+        setTimeout(() => {
+          modal.classList.remove('cf-shake');
+          error.classList.remove('visible');
+        }, 1400);
+      }
+    } catch (err) {
+      console.error('CF auth error:', err);
+      error.textContent = '認証エラーが発生しました';
       error.classList.add('visible');
-      modal.classList.add('cf-shake');
-      input.value = '';
-      setTimeout(() => {
-        modal.classList.remove('cf-shake');
-        error.classList.remove('visible');
-      }, 1400);
     }
   }
 
