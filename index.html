@@ -519,6 +519,20 @@
       <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" stroke-width="1.75"/>
       <line x1="1" y1="1" x2="23" y2="23" stroke-width="1.75"/>
     </symbol>
+
+    <!-- receipt (見積書・請求書) -->
+    <symbol id="ico-receipt" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 2H6a2 2 0 00-2 2v16l3-2 3 2 3-2 3 2 3-2V8z" stroke-width="1.75"/>
+      <path d="M14 2v6h6" stroke-width="1.75"/>
+      <path d="M8 12h8M8 16h5" stroke-width="1.5"/>
+    </symbol>
+
+    <!-- clipboard (注文書) -->
+    <symbol id="ico-clipboard" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke-width="1.75"/>
+      <rect x="9" y="3" width="6" height="4" rx="1" stroke-width="1.75"/>
+      <path d="M9 12h6M9 16h4" stroke-width="1.5"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -591,12 +605,12 @@
             <div style="font-size:10px;color:rgba(255,255,255,.45);letter-spacing:.06em;margin-top:3px;">作成中 4</div>
           </div>
           <div class="hc-item">
-            <div class="hc-num">3</div>
+            <div class="hc-num">5</div>
             <div class="hc-lbl">会計経理</div>
           </div>
         </div>
         <div class="hero-total">
-          <span class="ht-num">14</span>
+          <span class="ht-num">16</span>
           <span class="ht-lbl">systems total</span>
         </div>
       </div>
@@ -731,7 +745,7 @@
           <svg><use href="#ico-signpost" stroke="#6d28d9"/></svg>
           内業関連
         </span>
-        <span class="s-count">5 systems</span>
+        <span class="s-count">6 systems</span>
       </div>
       <div class="cards-grid">
 
@@ -753,7 +767,28 @@
           </div>
         </a>
 
-        <!-- No.08 国総研調書作成システム（開発中） -->
+        <!-- No.08 国交省様式ビューワー（橋梁点検） -->
+        <a href="https://bridge-mlit-viewer.vercel.app/" target="_blank" class="tool-card nai">
+          <div class="c-top">
+            <div class="c-icon nai">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 17h18M3 17V9l9-6 9 6v8M9 17v-6h6v6"/>
+                <circle cx="17.5" cy="15.5" r="2.5"/><path d="M19.5 17.5L21.5 19.5"/>
+              </svg>
+            </div>
+            <div>
+              <div class="c-no">No. 08</div>
+              <div class="c-name">国交省様式ビューワー</div>
+            </div>
+          </div>
+          <div class="c-desc">国交省様式（様式1〜3）の橋梁定期点検 Excel を取り込み、健全性診断区分・技術的な評価結果・状況写真ごとの評価・所見をブラウザで閲覧。取り込みデータは Supabase に自動保存され、リロード・他端末からも閲覧可能</div>
+          <div class="c-foot">
+            <div class="c-url">bridge-mlit-viewer.vercel.app</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.09 国総研調書作成システム（開発中） -->
         <div class="tool-card nai" style="opacity: 0.6; cursor: default; pointer-events: none;">
           <div class="c-top">
             <div class="c-icon nai">
@@ -763,7 +798,7 @@
               </svg>
             </div>
             <div>
-              <div class="c-no">No. 08</div>
+              <div class="c-no">No. 09</div>
               <div class="c-name">国総研調書作成システム <span style="display: inline-block; margin-left: 6px; padding: 2px 8px; background: #f5f3ff; color: #7c3aed; border-radius: 6px; font-size: 10px; font-weight: 600; letter-spacing: .05em;">開発中</span></div>
             </div>
           </div>
@@ -774,7 +809,7 @@
           </div>
         </div>
 
-        <!-- No.09 国交省様式調書作成システム（開発中） -->
+        <!-- No.10 国交省様式調書作成システム（開発中） -->
         <div class="tool-card nai" style="opacity: 0.6; cursor: default; pointer-events: none;">
           <div class="c-top">
             <div class="c-icon nai">
@@ -785,7 +820,7 @@
               </svg>
             </div>
             <div>
-              <div class="c-no">No. 09</div>
+              <div class="c-no">No. 10</div>
               <div class="c-name">国交省様式調書作成システム <span style="display: inline-block; margin-left: 6px; padding: 2px 8px; background: #f5f3ff; color: #7c3aed; border-radius: 6px; font-size: 10px; font-weight: 600; letter-spacing: .05em;">開発中</span></div>
             </div>
           </div>
@@ -796,7 +831,7 @@
           </div>
         </div>
 
-        <!-- No.10 点検野帳作成システム（開発中） -->
+        <!-- No.11 点検野帳作成システム（開発中） -->
         <div class="tool-card nai" style="opacity: 0.6; cursor: default; pointer-events: none;">
           <div class="c-top">
             <div class="c-icon nai">
@@ -806,7 +841,7 @@
               </svg>
             </div>
             <div>
-              <div class="c-no">No. 10</div>
+              <div class="c-no">No. 11</div>
               <div class="c-name">点検野帳作成システム <span style="display: inline-block; margin-left: 6px; padding: 2px 8px; background: #f5f3ff; color: #7c3aed; border-radius: 6px; font-size: 10px; font-weight: 600; letter-spacing: .05em;">開発中</span></div>
             </div>
           </div>
@@ -817,7 +852,7 @@
           </div>
         </div>
 
-        <!-- No.11 写真台帳作成システム（開発中） -->
+        <!-- No.12 写真台帳作成システム（開発中） -->
         <div class="tool-card nai" style="opacity: 0.6; cursor: default; pointer-events: none;">
           <div class="c-top">
             <div class="c-icon nai">
@@ -827,7 +862,7 @@
               </svg>
             </div>
             <div>
-              <div class="c-no">No. 11</div>
+              <div class="c-no">No. 12</div>
               <div class="c-name">写真台帳作成システム <span style="display: inline-block; margin-left: 6px; padding: 2px 8px; background: #f5f3ff; color: #7c3aed; border-radius: 6px; font-size: 10px; font-weight: 600; letter-spacing: .05em;">開発中</span></div>
             </div>
           </div>
@@ -841,25 +876,25 @@
       </div>
     </section>
 
-    <!-- ── 経理関連 (3) ── -->
+    <!-- ── 経理関連 (5) ── -->
     <section class="p-section">
       <div class="section-head">
         <span class="s-badge acc">
           <svg><use href="#ico-trending-up" stroke="#059669"/></svg>
           経理関連
         </span>
-        <span class="s-count">3 systems</span>
+        <span class="s-count">5 systems</span>
       </div>
       <div class="cards-grid">
 
-        <!-- No.12 キャッシュフロー（パスワード保護） -->
+        <!-- No.13 キャッシュフロー（パスワード保護） -->
         <a href="javascript:void(0)" onclick="openCfModal()" class="tool-card acc">
           <div class="c-top">
             <div class="c-icon acc">
               <svg><use href="#ico-trending-up" stroke="#059669"/></svg>
             </div>
             <div>
-              <div class="c-no">No. 12</div>
+              <div class="c-no">No. 13</div>
               <div class="c-name">日次キャッシュフロー管理システム</div>
             </div>
           </div>
@@ -870,14 +905,14 @@
           </div>
         </a>
 
-        <!-- No.13 出張手当（経理関連） -->
+        <!-- No.14 出張手当（経理関連） -->
         <a href="https://frex-design.github.io/travel-allowance/" target="_blank" class="tool-card acc">
           <div class="c-top">
             <div class="c-icon acc">
               <svg><use href="#ico-car" stroke="#059669"/></svg>
             </div>
             <div>
-              <div class="c-no">No. 13</div>
+              <div class="c-no">No. 14</div>
               <div class="c-name">出張手当管理システム</div>
             </div>
           </div>
@@ -888,20 +923,56 @@
           </div>
         </a>
 
-        <!-- No.14 横手帳簿 -->
+        <!-- No.15 横手帳簿 -->
         <a href="https://frex-design.github.io/yokote-ledger/" target="_blank" class="tool-card acc">
           <div class="c-top">
             <div class="c-icon acc">
               <svg><use href="#ico-book" stroke="#059669"/></svg>
             </div>
             <div>
-              <div class="c-no">No. 14</div>
+              <div class="c-no">No. 15</div>
               <div class="c-name">横手事業所 入出金帳簿</div>
             </div>
           </div>
           <div class="c-desc">2 資金源追跡 — 秋田銀行（横手）＋現金（横手）、4 トランザクションタイプ（現金支出・ATM 引出・本社資金移動・手当返金）、残高自動計算、Supabase クラウド同期</div>
           <div class="c-foot">
             <div class="c-url">frex-design.github.io/yokote-ledger</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.16 見積書/請求書管理（モーダル認証） -->
+        <a href="javascript:void(0)" onclick="openQuotationModal()" class="tool-card acc">
+          <div class="c-top">
+            <div class="c-icon acc">
+              <svg><use href="#ico-receipt" stroke="#059669"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 16</div>
+              <div class="c-name">見積書／請求書管理システム</div>
+            </div>
+          </div>
+          <div class="c-desc">見積書・請求書作成管理 — 中間見積書・中間請求書対応、行 D&amp;D 並び替え、フッターコメント個別編集、PDF 出力、附帯書類（福山・復建様式）対応、Supabase クラウド同期</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design-quotation-invoice.vercel.app</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.17 注文書管理（モーダル認証） -->
+        <a href="javascript:void(0)" onclick="openOrderModal()" class="tool-card acc">
+          <div class="c-top">
+            <div class="c-icon acc">
+              <svg><use href="#ico-clipboard" stroke="#059669"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 17</div>
+              <div class="c-name">注文書管理システム</div>
+            </div>
+          </div>
+          <div class="c-desc">注文書作成・管理 — 注文書発行（下書き・発行済み分類）、注文番号・取引先・件名・発行日・金額の一覧管理、取引先情報統合管理</div>
+          <div class="c-foot">
+            <div class="c-url">order-contract.vercel.app</div>
             <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
           </div>
         </a>
@@ -942,10 +1013,74 @@
     </div>
   </div>
 
+  <!-- ==================== ORDER PASSWORD MODAL ==================== -->
+  <div class="cf-backdrop" id="order-backdrop" onclick="closeOrderModal(event)">
+    <div class="cf-modal" id="order-modal">
+      <div class="cf-modal-head">
+        <div class="cf-modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+            <path d="M9 12h6M9 16h4" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="cf-modal-title">注文書管理システム</div>
+          <div class="cf-modal-sub">アクセス認証が必要です</div>
+        </div>
+      </div>
+      <div class="cf-divider"></div>
+      <div class="cf-label">パスワード</div>
+      <div class="cf-input-wrap">
+        <input type="password" id="order-pw" class="cf-input" placeholder="パスワードを入力" autocomplete="off" spellcheck="false"/>
+        <button class="cf-eye" id="order-eye-btn" onclick="toggleOrderEye()" tabindex="-1">
+          <svg id="order-eye-icon"><use href="#ico-eye" stroke="currentColor"/></svg>
+        </button>
+      </div>
+      <div class="cf-error" id="order-error">パスワードが正しくありません</div>
+      <div class="cf-btns">
+        <button class="cf-btn-cancel" onclick="closeOrderModal()">キャンセル</button>
+        <button class="cf-btn-open"   onclick="submitOrderPw()">認証して開く →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== QUOTATION PASSWORD MODAL ==================== -->
+  <div class="cf-backdrop" id="qt-backdrop" onclick="closeQuotationModal(event)">
+    <div class="cf-modal" id="qt-modal">
+      <div class="cf-modal-head">
+        <div class="cf-modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16l3-2 3 2 3-2 3 2 3-2V8z"/>
+            <path d="M14 2v6h6"/>
+            <path d="M8 12h8M8 16h5" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="cf-modal-title">見積書／請求書管理システム</div>
+          <div class="cf-modal-sub">アクセス認証が必要です</div>
+        </div>
+      </div>
+      <div class="cf-divider"></div>
+      <div class="cf-label">パスワード</div>
+      <div class="cf-input-wrap">
+        <input type="password" id="qt-pw" class="cf-input" placeholder="パスワードを入力" autocomplete="off" spellcheck="false"/>
+        <button class="cf-eye" id="qt-eye-btn" onclick="toggleQtEye()" tabindex="-1">
+          <svg id="qt-eye-icon"><use href="#ico-eye" stroke="currentColor"/></svg>
+        </button>
+      </div>
+      <div class="cf-error" id="qt-error">パスワードが正しくありません</div>
+      <div class="cf-btns">
+        <button class="cf-btn-cancel" onclick="closeQuotationModal()">キャンセル</button>
+        <button class="cf-btn-open"   onclick="submitQtPw()">認証して開く →</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="p-footer">
     <span>© 2022–2026 株式会社フレックスデザイン — 社内専用 / Internal Use Only</span>
-    <span>14 systems · Powered by GitHub Pages &amp; Supabase</span>
+    <span>16 systems · Powered by GitHub Pages &amp; Supabase</span>
     <span style="margin-top: 8px; display: block; font-size: 10px; color: var(--gray-300);">本システムの無断転載・複製・配布を禁じます。All Rights Reserved.</span>
   </footer>
 
@@ -1075,6 +1210,126 @@
   document.getElementById('cf-pw').addEventListener('keydown', e => {
     if (e.key === 'Enter')  submitCfPw();
     if (e.key === 'Escape') closeCfModal();
+  });
+
+  // ── 見積書/請求書管理システム専用パスワード ──
+  function openQuotationModal() {
+    document.getElementById('qt-pw').value = '';
+    document.getElementById('qt-error').classList.remove('visible');
+    document.getElementById('qt-backdrop').classList.add('open');
+    setTimeout(() => document.getElementById('qt-pw').focus(), 50);
+  }
+
+  function closeQuotationModal(e) {
+    if (e && e.target !== document.getElementById('qt-backdrop')) return;
+    document.getElementById('qt-backdrop').classList.remove('open');
+  }
+
+  async function submitQtPw() {
+    const input = document.getElementById('qt-pw');
+    const error = document.getElementById('qt-error');
+    const modal = document.getElementById('qt-modal');
+
+    try {
+      const res = await fetch('/api/quotation-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: input.value })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('qt-backdrop').classList.remove('open');
+        window.open(data.url, '_blank');
+        input.value = '';
+      } else {
+        error.classList.add('visible');
+        modal.classList.add('cf-shake');
+        input.value = '';
+        setTimeout(() => {
+          modal.classList.remove('cf-shake');
+          error.classList.remove('visible');
+        }, 1400);
+      }
+    } catch (err) {
+      console.error('QT auth error:', err);
+      error.textContent = '認証エラーが発生しました';
+      error.classList.add('visible');
+    }
+  }
+
+  let qtEyeOpen = false;
+  function toggleQtEye() {
+    qtEyeOpen = !qtEyeOpen;
+    document.getElementById('qt-pw').type = qtEyeOpen ? 'text' : 'password';
+    document.getElementById('qt-eye-icon').innerHTML =
+      `<use href="${qtEyeOpen ? '#ico-eye-off' : '#ico-eye'}" stroke="currentColor"/>`;
+  }
+
+  document.getElementById('qt-pw').addEventListener('keydown', e => {
+    if (e.key === 'Enter')  submitQtPw();
+    if (e.key === 'Escape') closeQuotationModal();
+  });
+
+  // ── 注文書管理システム専用パスワード ──
+  function openOrderModal() {
+    document.getElementById('order-pw').value = '';
+    document.getElementById('order-error').classList.remove('visible');
+    document.getElementById('order-backdrop').classList.add('open');
+    setTimeout(() => document.getElementById('order-pw').focus(), 50);
+  }
+
+  function closeOrderModal(e) {
+    if (e && e.target !== document.getElementById('order-backdrop')) return;
+    document.getElementById('order-backdrop').classList.remove('open');
+  }
+
+  async function submitOrderPw() {
+    const input = document.getElementById('order-pw');
+    const error = document.getElementById('order-error');
+    const modal = document.getElementById('order-modal');
+
+    try {
+      const res = await fetch('/api/order-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: input.value })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('order-backdrop').classList.remove('open');
+        window.open(data.url, '_blank');
+        input.value = '';
+      } else {
+        error.classList.add('visible');
+        modal.classList.add('cf-shake');
+        input.value = '';
+        setTimeout(() => {
+          modal.classList.remove('cf-shake');
+          error.classList.remove('visible');
+        }, 1400);
+      }
+    } catch (err) {
+      console.error('Order auth error:', err);
+      error.textContent = '認証エラーが発生しました';
+      error.classList.add('visible');
+    }
+  }
+
+  let orderEyeOpen = false;
+  function toggleOrderEye() {
+    orderEyeOpen = !orderEyeOpen;
+    document.getElementById('order-pw').type = orderEyeOpen ? 'text' : 'password';
+    document.getElementById('order-eye-icon').innerHTML =
+      `<use href="${orderEyeOpen ? '#ico-eye-off' : '#ico-eye'}" stroke="currentColor"/>`;
+  }
+
+  document.getElementById('order-pw').addEventListener('keydown', e => {
+    if (e.key === 'Enter')  submitOrderPw();
+    if (e.key === 'Escape') closeOrderModal();
   });
 </script>
 </body>
