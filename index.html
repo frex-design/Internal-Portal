@@ -876,36 +876,40 @@
       </div>
     </section>
 
-    <!-- ── 経理関連 (5) ── -->
+    <!-- ── 社内・総務関連 (6) ── -->
     <section class="p-section">
       <div class="section-head">
         <span class="s-badge acc">
           <svg><use href="#ico-trending-up" stroke="#059669"/></svg>
-          経理関連
+          社内・総務関連
         </span>
-        <span class="s-count">5 systems</span>
+        <span class="s-count">6 systems</span>
       </div>
       <div class="cards-grid">
 
-        <!-- No.13 キャッシュフロー（パスワード保護） -->
-        <a href="javascript:void(0)" onclick="openCfModal()" class="tool-card acc">
+        <!-- No.13 社内規程ポータル（自サイト側 Basic 認証） -->
+        <a href="https://company-regulations-nine.vercel.app/" target="_blank" class="tool-card acc">
           <div class="c-top">
             <div class="c-icon acc">
-              <svg><use href="#ico-trending-up" stroke="#059669"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+                <path d="M9 7h7M9 11h5" stroke-width="1.5"/>
+              </svg>
             </div>
             <div>
               <div class="c-no">No. 13</div>
-              <div class="c-name">日次キャッシュフロー管理システム</div>
+              <div class="c-name">社内規程ポータル</div>
             </div>
           </div>
-          <div class="c-desc">全口座統合管理 — 手元資金合計・全口座残高リアルタイム表示、振込予定（今日〜1 週間後）、当月売上高追跡、CSV 取込/出力、月次・年別集計、残高推移グラフ</div>
+          <div class="c-desc">就業規則・賃金規程・社宅規程などの社内規程を掲載。目次ごとのダッシュボードで直感的にジャンプ、規程検索、問い合わせフォーム（EmailJS）付き。Basic 認証で閲覧制限<br><span style="display:inline-block;margin-top:8px;font-size:11px;color:#4b5563;font-style:italic;">Idea originator: Rei Osato</span></div>
           <div class="c-foot">
-            <div class="c-url">frex-design.github.io/cashflow</div>
+            <div class="c-url">company-regulations-nine.vercel.app</div>
             <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
           </div>
         </a>
 
-        <!-- No.14 出張手当（経理関連） -->
+        <!-- No.14 出張手当（社内・総務関連） -->
         <a href="https://frex-design.github.io/travel-allowance/" target="_blank" class="tool-card acc">
           <div class="c-top">
             <div class="c-icon acc">
@@ -923,32 +927,14 @@
           </div>
         </a>
 
-        <!-- No.15 横手帳簿 -->
-        <a href="https://frex-design.github.io/yokote-ledger/" target="_blank" class="tool-card acc">
-          <div class="c-top">
-            <div class="c-icon acc">
-              <svg><use href="#ico-book" stroke="#059669"/></svg>
-            </div>
-            <div>
-              <div class="c-no">No. 15</div>
-              <div class="c-name">横手事業所 入出金帳簿</div>
-            </div>
-          </div>
-          <div class="c-desc">2 資金源追跡 — 秋田銀行（横手）＋現金（横手）、4 トランザクションタイプ（現金支出・ATM 引出・本社資金移動・手当返金）、残高自動計算、Supabase クラウド同期</div>
-          <div class="c-foot">
-            <div class="c-url">frex-design.github.io/yokote-ledger</div>
-            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
-          </div>
-        </a>
-
-        <!-- No.16 見積書/請求書管理（モーダル認証） -->
+        <!-- No.15 見積書/請求書管理（モーダル認証） -->
         <a href="javascript:void(0)" onclick="openQuotationModal()" class="tool-card acc">
           <div class="c-top">
             <div class="c-icon acc">
               <svg><use href="#ico-receipt" stroke="#059669"/></svg>
             </div>
             <div>
-              <div class="c-no">No. 16</div>
+              <div class="c-no">No. 15</div>
               <div class="c-name">見積書／請求書管理システム</div>
             </div>
           </div>
@@ -959,20 +945,56 @@
           </div>
         </a>
 
-        <!-- No.17 注文書管理（モーダル認証） -->
+        <!-- No.16 注文書管理（モーダル認証） -->
         <a href="javascript:void(0)" onclick="openOrderModal()" class="tool-card acc">
           <div class="c-top">
             <div class="c-icon acc">
               <svg><use href="#ico-clipboard" stroke="#059669"/></svg>
             </div>
             <div>
-              <div class="c-no">No. 17</div>
+              <div class="c-no">No. 16</div>
               <div class="c-name">注文書管理システム</div>
             </div>
           </div>
           <div class="c-desc">注文書作成・管理 — 注文書発行（下書き・発行済み分類）、注文番号・取引先・件名・発行日・金額の一覧管理、取引先情報統合管理</div>
           <div class="c-foot">
             <div class="c-url">order-contract.vercel.app</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.17 キャッシュフロー（モーダル認証） -->
+        <a href="javascript:void(0)" onclick="openCfModal()" class="tool-card acc">
+          <div class="c-top">
+            <div class="c-icon acc">
+              <svg><use href="#ico-trending-up" stroke="#059669"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 17</div>
+              <div class="c-name">日次キャッシュフロー管理システム</div>
+            </div>
+          </div>
+          <div class="c-desc">全口座統合管理 — 手元資金合計・全口座残高リアルタイム表示、振込予定（今日〜1 週間後）、当月売上高追跡、CSV 取込/出力、月次・年別集計、残高推移グラフ</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design.github.io/cashflow</div>
+            <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
+          </div>
+        </a>
+
+        <!-- No.18 横手帳簿 -->
+        <a href="https://frex-design.github.io/yokote-ledger/" target="_blank" class="tool-card acc">
+          <div class="c-top">
+            <div class="c-icon acc">
+              <svg><use href="#ico-book" stroke="#059669"/></svg>
+            </div>
+            <div>
+              <div class="c-no">No. 18</div>
+              <div class="c-name">横手事業所 入出金帳簿</div>
+            </div>
+          </div>
+          <div class="c-desc">2 資金源追跡 — 秋田銀行（横手）＋現金（横手）、4 トランザクションタイプ（現金支出・ATM 引出・本社資金移動・手当返金）、残高自動計算、Supabase クラウド同期</div>
+          <div class="c-foot">
+            <div class="c-url">frex-design.github.io/yokote-ledger</div>
             <div class="c-arrow"><svg><use href="#ico-arrow-right"/></svg></div>
           </div>
         </a>
@@ -1080,7 +1102,7 @@
   <!-- Footer -->
   <footer class="p-footer">
     <span>© 2022–2026 株式会社フレックスデザイン — 社内専用 / Internal Use Only</span>
-    <span>16 systems · Powered by GitHub Pages &amp; Supabase</span>
+    <span>18 systems · Powered by GitHub Pages &amp; Supabase</span>
     <span style="margin-top: 8px; display: block; font-size: 10px; color: var(--gray-300);">本システムの無断転載・複製・配布を禁じます。All Rights Reserved.</span>
   </footer>
 
