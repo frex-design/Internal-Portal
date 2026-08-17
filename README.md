@@ -1,73 +1,52 @@
 # FD Portal（社内システムポータル）
 
-株式会社フレックスデザインの社内システム統合ポータルサイト
+株式会社フレックスデザインの社内システム統合ポータル。
 
-## セキュリティ
+> 📖 **システム概要・収録システム一覧・パスワード・運用注意の詳細は、Obsidianノート `FD products/FD Portal.md` を参照（唯一の正式ドキュメント）。**
+> このREADMEはリポジトリ用の最小手順のみ。
 
-### サーバーサイド認証
+---
 
-- パスワードはソースコードに含まれません
-- 環境変数（Vercel）で管理
-- Cookie ベースのセッション認証
+## 本番
 
-### 2段階認証
-
-1. **ポータル入口**：全社員用パスワード（`PORTAL_PASSWORD`）
-2. **キャッシュフロー**：経営陣のみのパスワード（`CF_PASSWORD`）
+- URL: https://internal-portal-umber.vercel.app
+- ホスティング: Vercel（project `internal-portal` / team `frex-designs-projects`）
+- **git連携なし。手動 `vercel --prod` を打つまで本番は変わらない。**
+- GitHub Pagesは使用しない（`/api` の認証が動かないため。過去に廃止済み）。
 
 ## デプロイ
 
-### Vercel にデプロイ
-
 ```bash
-# Vercel CLI インストール（初回のみ）
-npm i -g vercel
-
-# デプロイ
-vercel
-
-# 本番環境
-vercel --prod
+# このフォルダで編集後
+vercel --prod --scope frex-designs-projects
 ```
 
-### 環境変数の設定
+反映確認は必ずライブURLを開いて目視すること。
 
-Vercel ダッシュボード → Settings → Environment Variables
+## 認証（2段階）
 
-```
-PORTAL_PASSWORD = （全社員用パスワード）
-CF_PASSWORD = （経営陣のみのパスワード）
-```
-
-## ローカル開発
-
-```bash
-# .env ファイルを作成
-cp .env.example .env
-
-# Vercel Dev で起動
-vercel dev
-```
+- パスワードはソースに含めず Vercel Environment Variables で管理（変更は再デプロイ不要で即反映）。
+  - `PORTAL_PASSWORD`（全社員用・ポータル入口）
+  - `CF_PASSWORD`（経営陣用・キャッシュフロー）
+- Cookieベースのセッション認証（`api/` のサーバーレス関数）。
 
 ## 構成
 
 ```
 FD Portal/
-├── api/
-│   ├── auth.js      # ポータル認証API
-│   ├── cf-auth.js   # キャッシュフロー認証API
-│   ├── verify.js    # セッション検証API
-│   └── logout.js    # ログアウトAPI
-├── public/
-│   └── index.html   # ポータルサイト本体
-├── vercel.json      # Vercel設定
-├── .env.example     # 環境変数サンプル
+├── api/            # auth.js / cf-auth.js / order-auth.js / quotation-auth.js / verify.js / logout.js
+├── index.html      # ポータル本体（カード直書き）
+├── package.json
+├── .env.example
 └── README.md
 ```
 
-## パスワード変更
+## ローカル開発
 
-Vercel ダッシュボードで環境変数を変更後、再デプロイ不要（即座に反映）
+```bash
+cp .env.example .env
+vercel dev
+```
 
 ---
 
